@@ -1,0 +1,26 @@
+#include <iostream>
+#include <cstring>
+using namespace std;
+int v[101];
+int dp[101][1001];// nr elemente, sum+1
+int subsetSum(int n,int sum) {
+	if (sum == 0)
+		return true;
+	if (n <= 0)
+		return false;
+	if (dp[n - 1][sum] != -1)
+		return dp[n-1][sum];
+	if (v[n - 1] > sum)
+		return dp[n - 1][sum] = subsetSum(n - 1, sum);
+	else
+		return dp[n - 1][sum] = subsetSum(n - 1, sum) || subsetSum(n - 1, sum - v[n - 1]);
+}
+int main() {
+	int n, sum;
+	cin >> n >> sum;
+	for (int i = 0; i < n; ++i)
+		cin >> v[i];
+	memset(dp, -1, sizeof (dp));
+	cout << subsetSum(n, sum);
+	return 0;
+}
