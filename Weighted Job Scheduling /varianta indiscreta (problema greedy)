@@ -1,0 +1,32 @@
+#include <fstream>
+using namespace std;
+ifstream f("spectacole.in");
+ofstream g("spectacole.out");
+struct spec{
+    int x, y;
+}a[101];
+int main(){
+    int n, i, k = 1;
+    f >> n;
+    for (i = 1; i <= n; ++i)
+        f >> a[i].x >> a[i].y;
+    bool ok = 0;
+    do{
+        ok = 1;
+        for (i = 1; i < n; ++i)
+            if (a[i].y > a[i + 1].y){
+                spec b = a[i];
+                a[i] = a[i + 1];
+                a[i + 1] = b;
+                ok = 0;
+            }
+    } while (ok == 0);
+    spec q = a[1];
+    for (i = 2; i <= n; i++)
+        if (a[i].x >= q.y){
+            k++;
+            q = a[i];
+        }
+    g << k;
+    return 0;
+}
