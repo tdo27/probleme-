@@ -1,0 +1,31 @@
+#include <iostream>
+using namespace std;
+const int Max = 101;
+int profit[Max], weight[Max];
+int dp[Max][Max];
+
+int knapsack(int W, int n) {
+	for (int i = 0; i <= n; ++i) {
+		for (int w = 0; w <= W; ++w) {
+			if (i == 0 || w == 0)
+				dp[i][w] = 0;
+			else if (weight[i - 1] <= w) {
+				dp[i][w] = max(dp[i - 1][w], profit[i - 1] + dp[i - 1][w - weight[i - 1]]);
+			}
+			else
+				dp[i][w] = dp[i - 1][w];
+		}
+	}
+	return dp[n][W];
+}
+
+int main() {
+	int n, Gmax;
+	cin >> n >> Gmax;
+	for (int i = 0; i < n; ++i) {
+		cin >> weight[i];
+		cin >> profit[i];
+	}
+	cout << knapsack(Gmax, n);
+	return 0;
+}
