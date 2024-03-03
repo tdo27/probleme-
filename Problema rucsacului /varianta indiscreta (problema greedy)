@@ -1,0 +1,42 @@
+#include <iostream>
+using namespace std;
+struct obiect{
+    int g, v;
+    float e;
+}
+a[10001];
+void sortt(obiect a[], int n){
+    int i, j;
+    for (i = 1; i < n; i++)
+        for (j = i + 1; j <= n; j++)
+            if (a[i].e > a[j].e)
+            {
+                obiect aux = a[i];
+                a[i] = a[j];
+                a[j] = aux;
+            }
+}
+int main(){
+    int n, i, gmax;
+    float c = 0;
+    cin >> n;
+    cin >> gmax;
+    for (i = 1; i <= n; i++){
+        cin >> a[i].g;
+        cin >> a[i].v;
+        a[i].e = (float)a[i].g / a[i].v;
+    }
+    sortt(a, n);
+    i = 1;
+    while (i <= n and gmax > 0)
+        if (a[i].g <= gmax){
+            c = c + a[i].v;
+            gmax = gmax - a[i].g;
+            i++;
+        }
+        else
+            break;
+    if (gmax > 0 and i <= n)
+        c = c + (float)(gmax * a[i].v) / a[i].g;
+    cout << c;
+}
