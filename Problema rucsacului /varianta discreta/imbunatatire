@@ -1,0 +1,18 @@
+#include <iostream>
+using namespace std;
+int dp[10001];
+int p[5001], weight[5001];
+int main(){
+// Observatie: putem retine doar ultimele doua randuri din matrice sub forma unui vector - reduce complexitatea O(n*W) la O(W)
+// Pentru probleme cu limita de memorie redusa
+    int n, Gmax;
+    cin >> n >> Gmax;
+    for (int i = 1; i <= n; i++)
+        cin >> p[i] >> weight[i];
+    for (int i = 1; i <= n; i++)
+        for (int j = Gmax; j >= 0; j--)
+            if (j >= weight[i])
+                dp[j] = max(dp[j], dp[j - weight[i]] + p[i]);
+    cout << dp[Gmax];
+    return 0;
+}
