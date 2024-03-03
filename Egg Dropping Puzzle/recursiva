@@ -1,0 +1,21 @@
+#include <iostream>
+using namespace std;
+const int nMax = 101;// in nMax este valoarea maxima al lui k
+int eggDrop(int n, int k) {
+	if (n <= 1)
+		return k;
+	if (k <= 1)
+		return k;
+	int mn = nMax;
+	for (int x = 1; x <= k; ++x) {
+		int y = max(eggDrop(n, k - x), eggDrop(n - 1, x - 1));
+		mn = min(mn, y);
+	}
+	return mn + 1;
+}
+int main() {
+	int n, k;
+	cin >> n >> k;
+	cout << eggDrop(n, k);
+	return 0;
+}
