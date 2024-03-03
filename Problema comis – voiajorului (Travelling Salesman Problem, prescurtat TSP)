@@ -1,0 +1,40 @@
+#include <fstream>
+#include <vector>
+using namespace std;
+ifstream f("hamilton.in");
+ofstream g("hamilton.out");
+int main() {
+	int n, m;
+	f >> n >> m;
+
+	vector<vector<int>>v(n), ad(n, vector<int>(n, 1e9));
+	for (int i = 1; i <= m; ++i) {
+		int x, y, z;
+		f >> x >> y >> z;
+		v[y].push_back(x);
+		ad[x][y] = z;
+	}
+
+	vector<vector<int>>dp(1 << n, vector<int>(n, 1e9));
+	dp[1][0] = 0;// masca lui 0
+	for (int mask = 3; mask < (1 << n); mask += 2) {
+		for (int i = 1; i <= n; ++i) {
+			if (mask & (1 << i)) {// testeaza daca bitul este setat la 1
+				for (auto j : v[i]) {
+					dp[mask][i] = min(dp[mask][i], dp[mask ^ (1 << i)][j] + ad[j][i]);
+				}
+			}
+		}
+	}
+
+	int sol = 1e9;
+	for (int i = 1; i < n; ++i) {
+		sol = min(sol, dp[(1 << n) - 1][i] + ad[i][0]);
+	}
+
+	if (sol == 1e9)
+		g << "Nu exista solutie";
+	else
+		g << sol;
+	return 0;
+}
