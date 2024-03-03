@@ -1,0 +1,53 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+struct job {
+	int s, f, pr;
+};
+bool regula(job a, job b) {
+	return a.f < b.f;
+}
+//int lastjob(int indice, vector<job>& v) {
+//	for (int j = indice - 1; j >= 0; --j)
+//		if (v[j].f <= v[indice - 1].s)
+//			return j;
+//	return -1;
+//}
+// este mai bine sa folosesti cautare binara decat cea liniara
+int lastjob(int n, vector<job>& v) {
+	int low = 0;
+	int high = n;
+	while (low <= high) {
+		int mid = (low + high) / 2;
+		if (v[mid].f <= v[n].s) {// daca vrei sa cauti cel mai mare sir STRICT crescator
+			if (v[mid + 1].f <= v[n].s)// trebuie eliminate aceste doua egaluri
+				low = mid + 1;
+			else return mid;
+		}
+		else high = mid - 1;
+	}
+	return -1;
+}
+int profitMx(int n, vector<job>& v) {
+	vector<int>Pr(n, 0);// Pr este dp-ul
+	Pr[0] = v[0].pr;
+	for (int i = 1; i < n; ++i) {
+		int includePr = v[i].pr;
+		int l = lastjob(i, v);
+		if (l != -1)
+			includePr += Pr[l];
+		Pr[i] = max(includePr, Pr[i - 1]);
+	}
+	return Pr[n - 1];
+}
+int main() {
+	int n;
+	cin >> n;
+	vector<job>v(n);
+	for (int i = 0; i < n; ++i)
+		cin >> v[i].s >> v[i].f >> v[i].pr;
+	sort(v.begin(), v.end(), regula);
+	cout << profitMx(n, v);
+	return 0;
+}
