@@ -1,0 +1,23 @@
+#include <iostream>
+#include <string>
+using namespace std;
+const int nMax = 101;
+int dp[nMax][nMax];
+int n;
+string s;
+int GetMinInsert() {
+	int l, r;
+	for (int i = 1; i < n; ++i)
+		for (l = 0, r = i; r < n; ++l, ++r)
+			if (s[l] == s[r])
+				dp[l][r] = dp[l + 1][r - 1];
+			else
+				dp[l][r] = 1 + min(dp[l][r - 1], dp[l + 1][r]);
+	return dp[0][n - 1];
+}
+int main() {
+	cin >> s;
+	n = s.size();
+	cout << GetMinInsert();
+	return 0;
+}
