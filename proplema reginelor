@@ -1,0 +1,76 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+#define N 8
+
+void afisare(int tabla[N][N]) {
+    int i, j;
+    for (i = 0; i < N; i++) {
+        for (j = 0; j < N; j++) {
+            if (tabla[i][j] == 1)
+                printf(" Q ");
+            else
+                printf(" . ");
+        }
+        printf("\n");
+    }
+    printf("\n");
+}
+
+int este_sigur(int tabla[N][N], int linie, int col) {
+    int i, j;
+
+    for (i = 0; i < col; i++) {
+        if (tabla[linie][i] == 1)
+            return 0;
+    }
+
+    for (i = linie, j = col; i >= 0 && j >= 0; i--, j--) {
+        if (tabla[i][j] == 1)
+            return 0;
+    }
+
+    for (i = linie, j = col; i < N && j >= 0; i++, j--) {
+        if (tabla[i][j] == 1)
+            return 0;
+    }
+    return 1;
+}
+
+int rezolva_regine(int tabla[N][N], int col) {
+    if (col >= N)
+        return 1;
+
+    int i;
+    for (i = 0; i < N; i++) {
+        if (este_sigur(tabla, i, col)) {
+            tabla[i][col] = 1;
+
+            if (rezolva_regine(tabla, col + 1))
+                return 1;
+
+            tabla[i][col] = 0;
+        }
+    }
+
+    return 0;
+}
+
+int main() {
+    int tabla[N][N];
+    int i, j;
+
+    for (i = 0; i < N; i++) {
+        for (j = 0; j < N; j++) {
+            tabla[i][j] = 0;
+        }
+    }
+
+    if (rezolva_regine(tabla, 0) == 0) {
+        printf("Nu s-a gasit solutie\n");
+    } else {
+        afisare(tabla);
+    }
+
+    return 0;
+}
